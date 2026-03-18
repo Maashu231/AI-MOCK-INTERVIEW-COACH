@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InterviewAI — Your Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:         #f8f9ff;
+      --white:      #ffffff;
+      --border:     #ebebf0;
+      --border2:    #dddde8;
+      --text:       #0f0f1a;
+      --text-soft:  #6b6b80;
+      --text-muted: #9999aa;
+      --indigo:     #4f46e5;
+      --indigo-light: #eef2ff;
+      --indigo-mid: #818cf8;
+      --green:      #10b981;
+      --green-light:#d1fae5;
+      --amber:      #f59e0b;
+      --amber-light:#fef3c7;
+      --red:        #ef4444;
+      --red-light:  #fee2e2;
+      --radius:     14px;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navbar ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--indigo), var(--indigo-mid));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--indigo), var(--indigo-mid));
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .btn-retake {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--indigo), #7c3aed);
+      border: none; border-radius: 8px;
+      color: white; font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+    }
+    .btn-retake:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── Main ── */
+    .main {
+      max-width: 800px; margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Hero Score Card ── */
+    .hero-card {
+      background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%);
+      border-radius: 24px;
+      padding: 48px;
+      text-align: center;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(79,70,229,0.25);
+      animation: fadeUp 0.6s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label {
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .big-score {
+      font-size: 80px; font-weight: 800;
+      color: white; line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .big-score span {
+      font-size: 32px; font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: -1px;
+    }
+    .score-grade {
+      font-size: 20px; font-weight: 700;
+      color: white; margin-bottom: 8px;
+      position: relative;
+    }
+    .score-subtitle {
+      font-size: 14px; color: rgba(255,255,255,0.65);
+      position: relative;
+    }
+
+    /* ── Stats Row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-bottom: 32px;
+      animation: fadeUp 0.6s ease both 0.1s;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .stat-card-number {
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px; margin-bottom: 4px;
+    }
+    .stat-card-number.green  { color: var(--green); }
+    .stat-card-number.amber  { color: var(--amber); }
+    .stat-card-number.indigo { color: var(--indigo); }
+    .stat-card-label {
+      font-size: 12px; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+
+    /* ── Section Title ── */
+    .section-title {
+      font-size: 18px; font-weight: 700;
+      color: var(--text); letter-spacing: -0.3px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── Question Results ── */
+    .results-list {
+      display: flex; flex-direction: column; gap: 16px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.6s ease both 0.2s;
+    }
+    .result-card {
+      background: var(--white);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .result-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      gap: 12px;
+    }
+    .result-header:hover { background: var(--bg); }
+    .result-header-left {
+      display: flex; align-items: center; gap: 12px;
+      flex: 1; min-width: 0;
+    }
+    .result-num {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 700;
+      color: white; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--indigo), #7c3aed);
+    }
+    .result-question {
+      font-size: 14px; font-weight: 500;
+      color: var(--text); line-height: 1.4;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .result-score-badge {
+      flex-shrink: 0;
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .result-score-badge.high  { background: var(--green-light); color: #065f46; }
+    .result-score-badge.mid   { background: var(--amber-light); color: #92400e; }
+    .result-score-badge.low   { background: var(--red-light);   color: #991b1b; }
+    .result-chevron {
+      font-size: 12px; color: var(--text-muted);
+      transition: transform 0.3s; flex-shrink: 0;
+    }
+    .result-chevron.open { transform: rotate(180deg); }
+
+    .result-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .result-body.open { display: block; }
+
+    .result-section { margin-top: 16px; }
+    .result-section-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .result-section-label.blue   { color: var(--indigo); }
+    .result-section-label.green  { color: var(--green); }
+    .result-section-label.amber  { color: var(--amber); }
+    .result-section-label.purple { color: #7c3aed; }
+
+    .result-section-text {
+      font-size: 13px; color: var(--text-soft);
+      line-height: 1.65;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px;
+    }
+
+    /* ── Retry Button ── */
+    .retry-section {
+      text-align: center;
+      animation: fadeUp 0.6s ease both 0.3s;
+    }
+    .btn-retry {
+      padding: 16px 48px;
+      background: linear-gradient(135deg, var(--indigo), #7c3aed);
+      border: none; border-radius: 10px;
+      color: white; font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-retry:hover { opacity: 0.92; transform: translateY(-2px); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    @media(max-width:600px){
+      nav { padding: 14px 20px; }
+      .main { padding: 24px 16px 60px; }
+      .hero-card { padding: 32px 24px; }
+      .big-score { font-size: 60px; }
+      .stats-row { grid-template-columns: repeat(3,1fr); gap: 10px; }
+      .stat-card { padding: 14px 10px; }
+      .stat-card-number { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-logo"><div class="nav-logo-icon">🤖</div>InterviewAI</div>
+    <button class="btn-retake" onclick="window.location.href='index.html'">← Take Another Interview</button>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Hero Score -->
+    <div class="hero-card">
+      <div class="hero-label">Your Interview Performance</div>
+      <div class="big-score" id="bigScore">0<span>/100</span></div>
+      <div class="score-grade" id="scoreGrade">—</div>
+      <div class="score-subtitle" id="scoreSubtitle">—</div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-number green" id="statExcellent">0</div>
+        <div class="stat-card-label">Excellent (8-10)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number amber" id="statGood">0</div>
+        <div class="stat-card-label">Good (5-7)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-number" style="color:var(--red)" id="statNeedsWork">0</div>
+        <div class="stat-card-label">Needs Work (0-4)</div>
+      </div>
+    </div>
+
+    <!-- Question Breakdown -->
+    <div class="section-title">📋 Question Breakdown</div>
+    <div class="results-list" id="resultsList"></div>
+
+    <!-- Retry -->
+    <div class="retry-section">
+      <button class="btn-retry" onclick="window.location.href='index.html'">
+        🔄 Try Another Interview
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    window.onload = () => {
+      const results    = JSON.parse(sessionStorage.getItem('results') || '[]');
+      const role       = sessionStorage.getItem('role') || 'Developer';
+      const difficulty = sessionStorage.getItem('difficulty') || 'Beginner';
+
+      if (!results.length) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // ── Calculate scores ──
+      const totalScore  = results.reduce((sum, r) => sum + (r.evaluation?.score || 0), 0);
+      const avgScore    = Math.round(totalScore / results.length * 10);
+      const excellent   = results.filter(r => r.evaluation?.score >= 8).length;
+      const good        = results.filter(r => r.evaluation?.score >= 5 && r.evaluation?.score < 8).length;
+      const needsWork   = results.filter(r => r.evaluation?.score < 5).length;
+
+      // ── Set hero score ──
+      document.getElementById('bigScore').innerHTML = `${avgScore}<span>/100</span>`;
+      document.getElementById('statExcellent').textContent = excellent;
+      document.getElementById('statGood').textContent      = good;
+      document.getElementById('statNeedsWork').textContent = needsWork;
+
+      // ── Grade ──
+      let grade, subtitle;
+      if (avgScore >= 80) {
+        grade    = '🏆 Outstanding Performance!';
+        subtitle = 'You are ready for real interviews! Excellent work.';
+      } else if (avgScore >= 60) {
+        grade    = '👍 Good Performance!';
+        subtitle = 'Solid answers! A bit more practice and you\'ll be interview-ready.';
+      } else if (avgScore >= 40) {
+        grade    = '📚 Keep Practicing!';
+        subtitle = 'You\'re on the right track. Focus on the weak areas below.';
+      } else {
+        grade    = '💪 Don\'t Give Up!';
+        subtitle = 'Every expert was once a beginner. Review the ideal answers and try again!';
+      }
+      document.getElementById('scoreGrade').textContent    = grade;
+      document.getElementById('scoreSubtitle').textContent = subtitle;
+
+      // ── Build results list ──
+      const list = document.getElementById('resultsList');
+      results.forEach((result, i) => {
+        const score     = result.evaluation?.score || 0;
+        const scoreClass = score >= 8 ? 'high' : score >= 5 ? 'mid' : 'low';
+        const emoji      = score >= 8 ? '🏆' : score >= 5 ? '👍' : '📚';
+
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="result-header" onclick="toggleResult(${i})">
+            <div class="result-header-left">
+              <div class="result-num">${i + 1}</div>
+              <div class="result-question">${result.question}</div>
+            </div>
+            <div class="result-score-badge ${scoreClass}">${emoji} ${score}/10</div>
+            <div class="result-chevron" id="chevron-${i}">▼</div>
+          </div>
+          <div class="result-body" id="body-${i}">
+            <div class="result-section">
+              <div class="result-section-label blue">💬 Your Answer</div>
+              <div class="result-section-text">${result.userAnswer}</div>
+            </div>
+            <div class="result-section">
+              <div class="result-section-label green">✅ What Was Good</div>
+              <div class="result-section-text">${result.evaluation?.feedback || '—'}</div>
+            </div>
+            <div class="result-section">
+              <div class="result-section-label amber">⚡ What to Improve</div>
+              <div class="result-section-text">${result.evaluation?.improvement || '—'}</div>
+            </div>
+            <div class="result-section">
+              <div class="result-section-label purple">💡 Ideal Answer</div>
+              <div class="result-section-text">${result.evaluation?.idealAnswer || '—'}</div>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    };
+
+    function toggleResult(i) {
+      const body    = document.getElementById(`body-${i}`);
+      const chevron = document.getElementById(`chevron-${i}`);
+      body.classList.toggle('open');
+      chevron.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

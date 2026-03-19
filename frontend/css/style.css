@@ -614,3 +614,260 @@ footer {
   animation: fadeUp 0.7s ease both 0.5s;
 }
 footer span { color: var(--indigo); font-weight: 500; }
+/* ── Timer ── */
+.timer-wrap {
+  display: flex; flex-direction: column;
+  align-items: flex-end; margin-top: 16px;
+}
+.timer-circle {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--indigo);
+  display: flex; align-items: center;
+  justify-content: center;
+  font-size: 14px; font-weight: 700;
+  color: var(--indigo);
+  background: var(--indigo-light);
+  transition: all 0.5s;
+}
+.timer-circle.warning {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: var(--amber-light);
+}
+.timer-circle.danger {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-light);
+  animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+.timer-label {
+  font-size: 10px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-top: 4px; font-weight: 500;
+}
+@keyframes timerPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+/* ── Voice Input ── */
+.answer-label-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.answer-label-row .answer-label { margin-bottom: 0; }
+
+.btn-mic {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: var(--indigo-light);
+  border: 1.5px solid #c7d2fe;
+  border-radius: 100px;
+  color: var(--indigo);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-mic:hover {
+  background: var(--indigo);
+  color: white;
+  border-color: var(--indigo);
+}
+.btn-mic.listening {
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+  animation: micPulse 1s ease-in-out infinite alternate;
+}
+@keyframes micPulse {
+  from { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  to   { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+}
+/* ── PDF Download Button ── */
+.retry-section {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  padding: 16px 48px;
+  background: var(--white);
+  border: 2px solid var(--indigo);
+  border-radius: 10px;
+  color: var(--indigo);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.2s;
+}
+.btn-download:hover {
+  background: var(--indigo);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+}
+/* ── History Button ── */
+.btn-history {
+  padding: 6px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--border2);
+  border-radius: 100px;
+  color: var(--text-soft);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-history:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+  background: var(--indigo-light);
+}
+/* ══════════════════════════════════
+   SMOOTH & PROFESSIONAL ANIMATIONS
+══════════════════════════════════ */
+
+/* ── Page Load Animations ── */
+@keyframes slideInLeft {
+  from { opacity:0; transform: translateX(-30px); }
+  to   { opacity:1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity:0; transform: translateX(30px); }
+  to   { opacity:1; transform: translateX(0); }
+}
+@keyframes slideInUp {
+  from { opacity:0; transform: translateY(30px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform: scale(0.92); }
+  to   { opacity:1; transform: scale(1); }
+}
+@keyframes countUp {
+  from { opacity:0; transform: translateY(20px) scale(0.8); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* ── Home Screen ── */
+.badge         { animation: slideInUp 0.5s ease both 0.1s; }
+h1             { animation: slideInUp 0.6s ease both 0.2s; }
+.hero-desc     { animation: slideInUp 0.6s ease both 0.3s; }
+.stats         { animation: slideInUp 0.6s ease both 0.4s; }
+.form-wrap     { animation: slideInUp 0.7s ease both 0.5s; }
+.features      { animation: slideInUp 0.6s ease both 0.6s; }
+footer         { animation: slideInUp 0.6s ease both 0.7s; }
+
+/* ── Interview Screen ── */
+.question-card { animation: scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+.answer-card   { animation: slideInUp 0.4s ease both 0.1s; }
+.actions       { animation: slideInUp 0.4s ease both 0.2s; }
+
+.feedback-card.show {
+  animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+/* ── Question dots pop in ── */
+.q-dot {
+  animation: scaleIn 0.3s ease both;
+}
+.q-dot:nth-child(1)  { animation-delay: 0.05s; }
+.q-dot:nth-child(2)  { animation-delay: 0.10s; }
+.q-dot:nth-child(3)  { animation-delay: 0.15s; }
+.q-dot:nth-child(4)  { animation-delay: 0.20s; }
+.q-dot:nth-child(5)  { animation-delay: 0.25s; }
+.q-dot:nth-child(6)  { animation-delay: 0.30s; }
+.q-dot:nth-child(7)  { animation-delay: 0.35s; }
+.q-dot:nth-child(8)  { animation-delay: 0.40s; }
+.q-dot:nth-child(9)  { animation-delay: 0.45s; }
+.q-dot:nth-child(10) { animation-delay: 0.50s; }
+
+/* ── Report Screen ── */
+.hero-card   { animation: scaleIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both 0.1s; }
+.big-score   { animation: countUp 0.7s cubic-bezier(0.34,1.56,0.64,1) both 0.3s; }
+.stats-row   { animation: slideInUp 0.6s ease both 0.4s; }
+.result-card { animation: slideInUp 0.5s ease both; }
+
+.result-card:nth-child(1)  { animation-delay: 0.1s; }
+.result-card:nth-child(2)  { animation-delay: 0.15s; }
+.result-card:nth-child(3)  { animation-delay: 0.20s; }
+.result-card:nth-child(4)  { animation-delay: 0.25s; }
+.result-card:nth-child(5)  { animation-delay: 0.30s; }
+.result-card:nth-child(6)  { animation-delay: 0.35s; }
+.result-card:nth-child(7)  { animation-delay: 0.40s; }
+.result-card:nth-child(8)  { animation-delay: 0.45s; }
+.result-card:nth-child(9)  { animation-delay: 0.50s; }
+.result-card:nth-child(10) { animation-delay: 0.55s; }
+
+.retry-section { animation: slideInUp 0.6s ease both 0.6s; }
+
+/* ── History Screen ── */
+.history-card { animation: slideInUp 0.5s ease both; }
+.history-card:nth-child(1) { animation-delay: 0.1s; }
+.history-card:nth-child(2) { animation-delay: 0.15s; }
+.history-card:nth-child(3) { animation-delay: 0.20s; }
+.history-card:nth-child(4) { animation-delay: 0.25s; }
+.history-card:nth-child(5) { animation-delay: 0.30s; }
+
+/* ── Hover Interactions ── */
+.form-card:hover {
+  box-shadow: 0 8px 32px rgba(79,70,229,0.12);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  box-shadow: 0 8px 24px rgba(79,70,229,0.1);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  box-shadow: 0 6px 20px rgba(79,70,229,0.1);
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+}
+
+.q-dot:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+/* ── Button Press Effect ── */
+.btn-start:active,
+.btn-submit:active,
+.btn-retry:active,
+.btn-download:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* ── Smooth Page Transition ── */
+body {
+  animation: fadeIn 0.4s ease both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Progress Bar Smooth Fill ── */
+.progress-fill {
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Score Circle Bounce ── */
+.score-circle {
+  animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both 0.3s;
+}
+
+/* ── Feedback sections stagger ── */
+.feedback-section:nth-child(1) { animation: slideInUp 0.4s ease both 0.1s; }
+.feedback-section:nth-child(2) { animation: slideInUp 0.4s ease both 0.2s; }
+.feedback-section:nth-child(3) { animation: slideInUp 0.4s ease both 0.3s; }

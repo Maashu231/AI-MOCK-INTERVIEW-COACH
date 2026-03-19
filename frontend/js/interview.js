@@ -1,3 +1,5 @@
+let timerInterval = null;
+const TIMER_SECONDS = 210; // 3 and half minutes
 const BACKEND = 'http://localhost:3000/api';
 
 let questions    = [];
@@ -67,6 +69,7 @@ function showQuestion(index) {
 
   updateProgress(index);
   updateDots(index);
+  startTimer();
 }
 
 async function submitAnswer() {
@@ -114,6 +117,7 @@ async function submitAnswer() {
 }
 
 function showFeedback(evaluation) {
+  stopTimer
   const score  = evaluation.score;
   const circle = document.getElementById('scoreCircle');
 
@@ -187,4 +191,109 @@ function showFetchError(msg) {
       style="padding:10px 24px;background:#4f46e5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
       ← Go Back
     </button>`;
+}
+function startTimer() {
+  clearInterval(timerInterval);
+  let timeLeft = TIMER_SECONDS;
+
+  const circle = document.getElementById('timerCircle');
+  const text   = document.getElementById('timerText');
+
+  circle.className = 'timer-circle';
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    text.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+    if (timeLeft <= 30) circle.className = 'timer-circle warning';
+    if (timeLeft <= 10) circle.className = 'timer-circle danger';
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      text.textContent = '0:00';
+      // Auto submit when time runs out
+      const answer = document.getElementById('answerInput').value.trim();
+      if (!answer) {
+        document.getElementById('answerInput').value = 'No answer provided — time ran out.';
+      }
+      submitAnswer();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+// ── Voice Input ──
+let recognition = null;
+let isListening = false;
+
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input is not supported in your browser. Please use Google Chrome!');
+    return;
+  }
+
+  if (isListening) {
+    stopVoice();
+    return;
+  }
+
+  startVoice();
+}
+
+function startVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+
+  recognition.continuous     = true;
+  recognition.interimResults = true;
+  recognition.lang           = 'en-US';
+
+  const btn     = document.getElementById('micBtn');
+  const micText = document.getElementById('micText');
+  const textarea = document.getElementById('answerInput');
+
+  btn.classList.add('listening');
+  micText.textContent = 'Listening...';
+  isListening = true;
+
+  recognition.onresult = (event) => {
+    let finalTranscript   = '';
+    let interimTranscript = '';
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      } else {
+        interimTranscript += event.results[i][0].transcript;
+      }
+    }
+
+    textarea.value = finalTranscript || interimTranscript;
+    document.getElementById('charCount').textContent = textarea.value.length + ' characters';
+  };
+
+  recognition.onerror = (event) => {
+    console.error('Voice error:', event.error);
+    stopVoice();
+  };
+
+  recognition.onend = () => {
+    if (isListening) stopVoice();
+  };
+
+  recognition.start();
+}
+
+function stopVoice() {
+  if (recognition) recognition.stop();
+  const btn     = document.getElementById('micBtn');
+  const micText = document.getElementById('micText');
+  btn.classList.remove('listening');
+  micText.textContent = 'Speak';
+  isListening = false;
 }

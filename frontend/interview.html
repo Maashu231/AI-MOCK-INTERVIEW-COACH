@@ -52,12 +52,24 @@
           </div>
         </div>
         <div class="question-text" id="questionText">Loading question...</div>
+        <!-- Timer -->
+        <div class="timer-wrap">
+          <div class="timer-circle" id="timerCircle">
+            <span id="timerText">3:30</span>
+          </div>
+          <div class="timer-label">Time Remaining</div>
+        </div>
       </div>
 
       <!-- Answer Card -->
       <div class="answer-card">
-        <div class="answer-label">✏️ Your Answer</div>
-        <textarea id="answerInput" placeholder="Type your answer here... Be as detailed as possible. Explain your thinking, give examples if you can."></textarea>
+        <div class="answer-label-row">
+          <div class="answer-label">✏️ Your Answer</div>
+          <button class="btn-mic" id="micBtn" onclick="toggleVoice()">
+            🎙️ <span id="micText">Speak</span>
+          </button>
+        </div>
+        <textarea id="answerInput" placeholder="Type your answer or click 🎙️ Speak to use voice..."></textarea>
         <div class="char-count" id="charCount">0 characters</div>
       </div>
 

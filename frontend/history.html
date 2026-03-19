@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InterviewAI — History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo"><div class="nav-logo-icon">🤖</div>InterviewAI</div>
+    <button class="btn-history" onclick="window.location.href='index.html'">← Back</button>
+  </nav>
+
+  <div class="main">
+    <div class="section-title">📋 Interview History</div>
+
+    <div id="historyList"></div>
+
+    <div id="emptyState" style="display:none; text-align:center; padding:60px 24px;">
+      <div style="font-size:48px; margin-bottom:16px">📭</div>
+      <h3 style="font-size:18px; font-weight:700; color:var(--text); margin-bottom:8px">No interviews yet!</h3>
+      <p style="font-size:14px; color:var(--text-soft); margin-bottom:24px">Complete your first interview to see history here.</p>
+      <button class="btn-retry" style="width:auto; padding:12px 32px;" onclick="window.location.href='index.html'">Start Interview →</button>
+    </div>
+  </div>
+
+  <script src="js/history.js"></script>
+</body>
+</html>

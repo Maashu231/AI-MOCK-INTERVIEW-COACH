@@ -1,10 +1,4 @@
-code .gitignore
-```
 
----
-
-## Paste This Inside
-```
 # Dependencies
 node_modules/
 

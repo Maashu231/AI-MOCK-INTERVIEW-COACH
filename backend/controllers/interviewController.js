@@ -8,8 +8,8 @@ console.log('API KEY LOADED:', process.env.GEMINI_API_KEY);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Two separate models to save quota
-const modelQuestion = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-const modelEvaluate = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
+const modelQuestion = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+const modelEvaluate = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
 
 exports.generateQuestions = async (req, res) => {
   try {

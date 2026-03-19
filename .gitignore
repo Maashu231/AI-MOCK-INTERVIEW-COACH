@@ -1,0 +1,24 @@
+code .gitignore
+```
+
+---
+
+## Paste This Inside
+```
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+backend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/

@@ -16,9 +16,38 @@ window.onload = async () => {
   document.getElementById('questionRole').textContent = `${role} · ${difficulty}`;
 
   buildDots();
+
+  // ── Check for saved progress ──
+  const saved = restoreProgress();
+  if (saved) {
+    const resume = confirm(`You have an unfinished interview (${saved.results.length}/10 questions answered). Resume from where you left off?`);
+
+    if (resume) {
+      // Restore everything
+      questions    = saved.questions;
+      results      = saved.results;
+      currentIndex = saved.results.length;
+
+      // Mark completed dots
+      for (let i = 0; i < results.length; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        if (dot) { dot.classList.remove('active'); dot.classList.add('done'); }
+      }
+
+      // Update progress bar
+      document.getElementById('progressFill').style.width  = (results.length / 10 * 100) + '%';
+      document.getElementById('progressCount').textContent = `${results.length} / 10`;
+
+      // Show next question
+      showQuestion(currentIndex);
+      return;
+    } else {
+      clearProgress();
+    }
+  }
+
   await fetchQuestions();
 };
-
 function buildDots() {
   const wrap = document.getElementById('questionDots');
   wrap.innerHTML = '';
@@ -117,7 +146,8 @@ async function submitAnswer() {
 }
 
 function showFeedback(evaluation) {
-  stopTimer
+  saveProgress();
+  stopTimer();
   const score  = evaluation.score;
   const circle = document.getElementById('scoreCircle');
 
@@ -140,6 +170,7 @@ function showFeedback(evaluation) {
 
 function nextQuestion() {
   if (currentIndex === questions.length - 1) {
+    clearProgress();
     sessionStorage.setItem('results',    JSON.stringify(results));
     sessionStorage.setItem('role',       role);
     sessionStorage.setItem('difficulty', difficulty);
@@ -296,4 +327,50 @@ function stopVoice() {
   btn.classList.remove('listening');
   micText.textContent = 'Speak';
   isListening = false;
+}
+// ── Save progress to localStorage ──
+function saveProgress() {
+  const progress = {
+    role,
+    difficulty,
+    questions,
+    results,
+    currentIndex,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('interviewProgress', JSON.stringify(progress));
+}
+
+// ── Restore progress if exists ──
+function restoreProgress() {
+  const saved = localStorage.getItem('interviewProgress');
+  if (!saved) return false;
+
+  const progress = JSON.parse(saved);
+
+  // Check if progress is less than 2 hours old
+  const twoHours = 2 * 60 * 60 * 1000;
+  if (Date.now() - progress.timestamp > twoHours) {
+    localStorage.removeItem('interviewProgress');
+    return false;
+  }
+
+  // Check if same role and difficulty
+  if (progress.role !== role || progress.difficulty !== difficulty) {
+    localStorage.removeItem('interviewProgress');
+    return false;
+  }
+
+  // Check if interview was already completed
+  if (progress.results.length === 10) {
+    localStorage.removeItem('interviewProgress');
+    return false;
+  }
+
+  return progress;
+}
+
+// ── Clear progress after interview completes ──
+function clearProgress() {
+  localStorage.removeItem('interviewProgress');
 }

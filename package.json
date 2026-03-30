@@ -1,12 +1,13 @@
 {
   "name": "ai-mock-interview-coach",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "AI-powered mock interview coach with Gemini AI",
+  "main": "backend/server.js",
   "scripts": {
+    "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["interview", "ai", "gemini", "mock-interview"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

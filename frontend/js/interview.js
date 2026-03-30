@@ -1,6 +1,6 @@
 let timerInterval = null;
 const TIMER_SECONDS = 300; // 5 minutes
-const BACKEND = 'http://localhost:3000/api';
+const BACKEND = '/api';
 
 let questions    = [];
 let currentIndex = 0;

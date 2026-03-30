@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI-powered mock interview session with real-time feedback and scoring. Practice with role-specific questions and improve your interview skills."/>
   <title>InterviewAI — Interview Session</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
   <!-- Navbar -->
   <nav>
-    <div class="nav-logo"><div class="nav-logo-icon">🤖</div>InterviewAI</div>
+    <div class="nav-logo">
+      <div class="nav-logo-icon">🤖</div>InterviewAI
+    </div>
     <div class="nav-right">
       <div class="nav-info" id="sessionInfo">Loading...</div>
     </div>
@@ -23,7 +29,9 @@
       <div class="progress-label">Progress</div>
       <div class="progress-count" id="progressCount">0 / 10</div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
   </div>
 
   <!-- Question Dots -->
@@ -34,7 +42,7 @@
 
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
-      <div class="spinner"></div>
+      <div class="spinner">🧠</div>
       <h3>Generating Your Questions</h3>
       <p>Our AI is preparing personalized questions for you...</p>
     </div>
@@ -55,7 +63,7 @@
         <!-- Timer -->
         <div class="timer-wrap">
           <div class="timer-circle" id="timerCircle">
-            <span id="timerText">3:30</span>
+            <span id="timerText">5:00</span>
           </div>
           <div class="timer-label">Time Remaining</div>
         </div>
@@ -69,7 +77,7 @@
             🎙️ <span id="micText">Speak</span>
           </button>
         </div>
-        <textarea id="answerInput" placeholder="Type your answer or click 🎙️ Speak to use voice..."></textarea>
+        <textarea id="answerInput" class="answer-textarea" placeholder="Type your answer or click 🎙️ Speak to use voice..."></textarea>
         <div class="char-count" id="charCount">0 characters</div>
       </div>
 
@@ -122,4 +130,5 @@
 
   <script src="js/interview.js"></script>
 </body>
+
 </html>

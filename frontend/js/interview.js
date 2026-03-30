@@ -1,5 +1,5 @@
 let timerInterval = null;
-const TIMER_SECONDS = 210; // 3 and half minutes
+const TIMER_SECONDS = 300; // 5 minutes
 const BACKEND = 'http://localhost:3000/api';
 
 let questions    = [];
@@ -7,10 +7,14 @@ let currentIndex = 0;
 let results      = [];
 let role         = '';
 let difficulty   = '';
+let round        = '';
+let level        = '';
 
 window.onload = async () => {
   role       = sessionStorage.getItem('role')       || 'Frontend Developer';
   difficulty = sessionStorage.getItem('difficulty') || 'Beginner';
+  round      = sessionStorage.getItem('round')      || 'Technical';
+  level      = sessionStorage.getItem('level')      || 'Fresher';
 
   document.getElementById('sessionInfo').innerHTML  = `<span>${role}</span> · ${difficulty}`;
   document.getElementById('questionRole').textContent = `${role} · ${difficulty}`;
@@ -65,7 +69,7 @@ async function fetchQuestions() {
     const res  = await fetch(`${BACKEND}/generate-questions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role, difficulty })
+      body: JSON.stringify({ role, difficulty, round, level })
     });
     const data = await res.json();
     if (data.success) {
@@ -261,6 +265,7 @@ function stopTimer() {
 // ── Voice Input ──
 let recognition = null;
 let isListening = false;
+let accumulatedTranscript = ''; // Accumulate voice across phrases
 
 function toggleVoice() {
   if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -292,6 +297,9 @@ function startVoice() {
   micText.textContent = 'Listening...';
   isListening = true;
 
+  // Start fresh accumulation from any existing text in textarea
+  accumulatedTranscript = textarea.value;
+
   recognition.onresult = (event) => {
     let finalTranscript   = '';
     let interimTranscript = '';
@@ -304,7 +312,13 @@ function startVoice() {
       }
     }
 
-    textarea.value = finalTranscript || interimTranscript;
+    // Accumulate final transcript and show interim for current phrase
+    if (finalTranscript) {
+      accumulatedTranscript += (accumulatedTranscript ? ' ' : '') + finalTranscript.trim();
+      textarea.value = accumulatedTranscript;
+    } else {
+      textarea.value = accumulatedTranscript + (accumulatedTranscript ? ' ' : '') + interimTranscript;
+    }
     document.getElementById('charCount').textContent = textarea.value.length + ' characters';
   };
 

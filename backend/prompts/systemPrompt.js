@@ -1,14 +1,25 @@
 // This function generates the prompt to create interview questions
-const generateQuestionsPrompt = (role, difficulty) => {
+const generateQuestionsPrompt = (role, difficulty, round = 'Technical', level = 'Fresher') => {
   return `
     You are a strict and experienced technical interviewer at a top IT company.
     
-    Your job is to generate exactly 10 interview questions for a ${role} developer 
+    Your job is to generate exactly 10 interview questions for a ${role} position
     at ${difficulty} level.
 
+    Candidate Profile:
+    - Experience Level: ${level}
+    - Interview Round: ${round}
+    - Difficulty: ${difficulty}
+
     Rules you must follow:
-    - Questions must be real questions asked in actual company interviews
+    - Questions must be appropriate for the "${round}" interview round:
+      * HR Round: Focus on behavioral questions, culture fit, career goals, and soft skills
+      * Technical Round: Focus on role-specific technical concepts, architecture, and problem solving
+      * Coding Round: Focus on data structures, algorithms, coding patterns, and problem solving
+      * Managerial Round: Focus on leadership, project management, decision making, and team dynamics
     - Questions must match the ${difficulty} level strictly
+    - Questions should be appropriate for a ${level}-level candidate
+    - Questions must be real questions asked in actual company interviews
     - Mix of conceptual, practical and scenario based questions
     - No multiple choice questions
     - Each question must be clear and specific

@@ -59,21 +59,23 @@ window.onload = () => {
         <div class="result-chevron" id="chevron-${i}">▼</div>
       </div>
       <div class="result-body" id="body-${i}">
-        <div class="result-section">
-          <div class="result-section-label blue">💬 Your Answer</div>
-          <div class="result-section-text">${result.userAnswer}</div>
-        </div>
-        <div class="result-section">
-          <div class="result-section-label green">✅ What Was Good</div>
-          <div class="result-section-text">${result.evaluation?.feedback || '—'}</div>
-        </div>
-        <div class="result-section">
-          <div class="result-section-label amber">⚡ What to Improve</div>
-          <div class="result-section-text">${result.evaluation?.improvement || '—'}</div>
-        </div>
-        <div class="result-section">
-          <div class="result-section-label purple">💡 Ideal Answer</div>
-          <div class="result-section-text">${result.evaluation?.idealAnswer || '—'}</div>
+        <div class="result-body-inner">
+          <div class="result-section">
+            <div class="result-section-label blue">💬 Your Answer</div>
+            <div class="result-section-text">${result.userAnswer}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-section-label green">✅ What Was Good</div>
+            <div class="result-section-text">${result.evaluation?.feedback || '—'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-section-label amber">⚡ What to Improve</div>
+            <div class="result-section-text">${result.evaluation?.improvement || '—'}</div>
+          </div>
+          <div class="result-section">
+            <div class="result-section-label purple">💡 Ideal Answer</div>
+            <div class="result-section-text">${result.evaluation?.idealAnswer || '—'}</div>
+          </div>
         </div>
       </div>
     `;

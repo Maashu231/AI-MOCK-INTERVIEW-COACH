@@ -21,8 +21,8 @@ window.onload = () => {
         <div class="result-header-left">
           <div class="result-num">${i + 1}</div>
           <div>
-            <div style="font-size:14px; font-weight:600; color:var(--text)">${interview.role}</div>
-            <div style="font-size:12px; color:var(--text-muted)">${interview.date} · ${interview.time} · ${interview.difficulty}</div>
+            <div style="font-size:14px; font-weight:600; color:var(--white)">${interview.role}</div>
+            <div style="font-size:12px; color:var(--muted)">${interview.date} · ${interview.time} · ${interview.difficulty}</div>
           </div>
         </div>
         <div class="result-score-badge ${scoreClass}">${emoji} ${interview.score}/100</div>

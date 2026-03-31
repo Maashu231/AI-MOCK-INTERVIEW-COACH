@@ -1,4 +1,20 @@
 
+// ── Format ideal answer: render code blocks properly ──
+function formatIdealAnswer(text) {
+  if (!text) return '—';
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const hasCode = /\\n/.test(text) && /[{};()=]/.test(text);
+  if (hasCode) {
+    const parts = escaped.split(/\\n/);
+    const explanation = parts[0];
+    const code = parts.slice(1).join('\n');
+    if (code.trim()) {
+      return `<p style="margin-bottom:10px">${explanation}</p><pre class="code-block"><code>${code}</code></pre>`;
+    }
+  }
+  return escaped.replace(/\\n/g, '<br>');
+}
+
 window.onload = () => {
   const results    = JSON.parse(sessionStorage.getItem('results') || '[]');
   const role       = sessionStorage.getItem('role') || 'Developer';
@@ -74,7 +90,7 @@ window.onload = () => {
           </div>
           <div class="result-section">
             <div class="result-section-label purple">💡 Ideal Answer</div>
-            <div class="result-section-text">${result.evaluation?.idealAnswer || '—'}</div>
+            <div class="result-section-text">${formatIdealAnswer(result.evaluation?.idealAnswer)}</div>
           </div>
         </div>
       </div>

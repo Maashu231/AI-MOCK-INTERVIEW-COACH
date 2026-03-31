@@ -53,12 +53,26 @@ const evaluateAnswerPrompt = (question, userAnswer) => {
       "idealAnswer": "The perfect answer to this question"
     }
 
+    IMPORTANT rules for the "idealAnswer" field:
+    - If the question is a CODING question (asking to write code, implement a function, solve a DSA problem):
+      * Write clean, well-formatted code with proper indentation
+      * Use newline characters (\\n) to separate lines of code
+      * Start the code on a new line after a brief one-line explanation
+      * Example format: "Use two pointers approach:\\nfunction twoSum(nums, target) {\\n  const map = {};\\n  for (let i = 0; i < nums.length; i++) {\\n    if (map[target - nums[i]] !== undefined) {\\n      return [map[target - nums[i]], i];\\n    }\\n    map[nums[i]] = i;\\n  }\\n}"
+    - If the question is a NON-CODING question (conceptual, behavioral, HR, managerial):
+      * Keep the ideal answer SHORT — maximum 4 to 6 sentences
+      * Write what a smart candidate would say in a real interview, not a textbook essay
+      * Be direct and to the point. No filler words or unnecessary elaboration
+      * Focus on key points that demonstrate understanding
+
     Scoring rules:
     - 0 to 3 = Wrong or very incomplete answer
     - 4 to 6 = Partially correct answer
     - 7 to 8 = Good answer with minor gaps
     - 9 to 10 = Perfect and complete answer
 
+    Keep "feedback" to 1-2 sentences.
+    Keep "improvement" to 1-2 sentences.
     Do not add any explanation or extra text outside the JSON object.
   `;
 };

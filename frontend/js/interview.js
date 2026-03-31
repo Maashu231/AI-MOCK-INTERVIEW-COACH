@@ -161,7 +161,7 @@ function showFeedback(evaluation) {
   document.getElementById('scoreFeedback').textContent = evaluation.feedback;
   document.getElementById('feedbackGood').textContent  = evaluation.feedback;
   document.getElementById('feedbackImprove').textContent = evaluation.improvement;
-  document.getElementById('feedbackIdeal').textContent   = evaluation.idealAnswer;
+  document.getElementById('feedbackIdeal').innerHTML    = formatIdealAnswer(evaluation.idealAnswer);
 
   document.getElementById('feedbackCard').classList.add('show');
   document.getElementById('submitBtn').style.display = 'none';
@@ -216,6 +216,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ── Format ideal answer: render code blocks properly ──
+function formatIdealAnswer(text) {
+  if (!text) return '—';
+
+  // Escape HTML to prevent XSS
+  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Detect if the answer contains code (has \n with code-like patterns)
+  const hasCode = /\\n/.test(text) && /[{};()=]/.test(text);
+
+  if (hasCode) {
+    // Split into explanation and code parts
+    const parts = escaped.split(/\\n/);
+    const explanation = parts[0];
+    const code = parts.slice(1).join('\n');
+
+    if (code.trim()) {
+      return `<p style="margin-bottom:10px">${explanation}</p><pre class="code-block"><code>${code}</code></pre>`;
+    }
+  }
+
+  // For non-code answers, just convert \n to line breaks
+  return escaped.replace(/\\n/g, '<br>');
+}
 
 function showFetchError(msg) {
   document.getElementById('loadingScreen').innerHTML = `

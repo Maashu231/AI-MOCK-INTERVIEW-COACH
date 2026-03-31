@@ -885,3 +885,21 @@ body > footer {
   font-size: 12px;
   color: var(--muted);
 }
+
+/* ── Code Block for Ideal Answers ── */
+.code-block {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-top: 8px;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+.code-block code {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cyan);
+}

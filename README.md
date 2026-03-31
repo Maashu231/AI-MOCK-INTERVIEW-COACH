@@ -1,68 +1,72 @@
 # InterviewAI — AI Mock Interview Coach
 
-An AI-powered mock interview app that generates real technical interview questions, evaluates your answers, and gives you a detailed performance report.
+AI-powered mock interview app. Pick a role, answer questions, get instant feedback.
 
----
+**Live:** [ai-mock-interview-coach.onrender.com](https://ai-mock-interview-coach.onrender.com)
 
-## What It Does
+## Features
 
-- Generates 10 role-specific interview questions using Gemini AI
-- Evaluates each answer with a score out of 10
-- Shows feedback, improvements, and ideal answers
-- Generates a full performance report at the end
-
----
+- 25+ tech roles with 4 interview rounds (HR, Technical, Coding, Managerial)
+- 10 AI-generated questions per session using Google Gemini
+- Real-time scoring with feedback and ideal answers
+- Voice input support (Chrome)
+- PDF report download
+- Interview history tracking
+- Multi-key API rotation for quota management
 
 ## Tech Stack
 
-- **Frontend** — HTML, CSS, JavaScript
-- **Backend** — Node.js, Express.js
-- **AI** — Google Gemini API
+**Frontend:** HTML, CSS, JavaScript  
+**Backend:** Node.js, Express  
+**AI:** Google Gemini 2.5 Flash Lite
 
----
+## Setup
 
-## Getting Started
-
-**1. Clone the repo**
 ```bash
-git clone https://github.com/yourusername/ai-mock-interview-coach.git
-cd ai-mock-interview-coach
-```
-
-**2. Install dependencies**
-```bash
+git clone https://github.com/Maashu231/AI-MOCK-INTERVIEW-COACH.git
+cd AI-MOCK-INTERVIEW-COACH
 npm install
 ```
 
-**3. Add your API key**
-
-Create a `.env` file inside `backend/` folder:
+Create `backend/.env`:
 ```
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEYS=your_api_key_here
 PORT=3000
 ```
 
-Get a free API key at [aistudio.google.com](https://aistudio.google.com)
+Get a free key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 
-**4. Start the server**
 ```bash
-node backend/server.js
+npm start
 ```
 
-**5. Open the app**
+Open [http://localhost:3000](http://localhost:3000)
 
-Open `frontend/index.html` in your browser.
+## Project Structure
 
----
+```
+backend/
+  server.js              # Express server
+  controllers/           # Gemini API logic + key rotation
+  prompts/               # AI prompt templates
+  routes/                # API endpoints
 
-## Supported Roles
+frontend/
+  index.html             # Landing page
+  interview.html         # Interview session
+  report.html            # Performance report
+  history.html           # Past interviews
+  css/style.css          # Styling
+  js/                    # Page logic, voice input, PDF generation
+```
 
-Frontend Developer · Backend Developer · Full Stack · DevOps · Data Scientist · Mobile Developer · AI Engineer · System Design
+## API
 
-## Difficulty Levels
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/generate-questions` | Generate 10 questions |
+| POST | `/api/evaluate-answer` | Score an answer |
 
-Beginner · Intermediate · Advanced
+## License
 
----
-
-Built with Node.js + Express + Google Gemini API
+ISC

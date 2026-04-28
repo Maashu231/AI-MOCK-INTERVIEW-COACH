@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🎯 InterviewAI
+<img src="assets/banner.png" alt="InterviewAI Banner" width="100%" />
+
+<br/>
 
 AI-powered mock interview coach that helps you practice and ace your tech interviews.
 Pick a role, answer AI-generated questions, get instant scores and feedback — all for free.

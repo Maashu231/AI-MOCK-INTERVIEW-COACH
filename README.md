@@ -13,7 +13,7 @@ Pick a role, answer AI-generated questions, get instant scores and feedback — 
 
 ## 🔗 Live Demo
 
-🌐 [View Live App](https://ai-mock-interview-saqe.onrender.com)
+🌐 [View Live App](https://ai-mock-interview-coach-mu.vercel.app)
 
 ---
 
@@ -33,7 +33,7 @@ Pick a role, answer AI-generated questions, get instant scores and feedback — 
 - ⏱️ **5-Minute Timer** — Simulates real interview pressure per question
 - 📄 **PDF Reports** — Download your performance report with one click
 - 📋 **Interview History** — View and revisit your last 10 sessions
-- 💾 **Auto-Save Progress** — Resume interrupted interviews within 2 hours
+- 💾 **Auto-Save Progress** — Resume interrupted interviews within 2 hours          
 - 🎨 **Modern Dark UI** — Animated canvas background with smooth interactions
 
 ---

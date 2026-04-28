@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/banner.png" alt="InterviewAI Banner" width="100%" />
+# 🎯 **InterviewAI**
 
-<br/>
+<img src="assets/banner.png" alt="InterviewAI Banner" width="100%" />
 
 AI-powered mock interview coach that helps you practice and ace your tech interviews.
 Pick a role, answer AI-generated questions, get instant scores and feedback — all for free.

@@ -53,33 +53,33 @@ InterviewAI is built with a simple, clean architecture:
 
 ```
 AI-MOCK-INTERVIEW-COACH/
-|
-|-- backend/
-|   |-- controllers/
-|   |   |-- interviewController.js    # Gemini API calls + key rotation
-|   |-- prompts/
-|   |   |-- systemPrompt.js           # AI prompt templates
-|   |-- routes/
-|   |   |-- interview.js              # API route definitions
-|   |-- server.js                     # Express server entry point
-|   |-- .env                          # API keys (git-ignored)
-|
-|-- frontend/
-|   |-- css/
-|   |   |-- style.css                 # Full dark theme + animations
-|   |-- js/
-|   |   |-- main.js                   # Landing page + canvas background
-|   |   |-- interview.js              # Interview session + voice + timer
-|   |   |-- report.js                 # Score report + PDF download
-|   |   |-- history.js                # Past sessions from localStorage
-|   |-- index.html                    # Landing page
-|   |-- interview.html                # Interview session page
-|   |-- report.html                   # Performance report page
-|   |-- history.html                  # Interview history page
-|
-|-- .gitignore
-|-- package.json
-|-- README.md
+│
+├── backend/
+│   ├── controllers/
+│   │   └── interviewController.js    # Gemini API calls + key rotation
+│   ├── prompts/
+│   │   └── systemPrompt.js           # AI prompt templates
+│   ├── routes/
+│   │   └── interview.js              # API route definitions
+│   ├── server.js                     # Express server entry point
+│   └── .env                          # API keys (git-ignored)
+│
+├── frontend/
+│   ├── css/
+│   │   └── style.css                 # Full dark theme + animations
+│   ├── js/
+│   │   ├── main.js                   # Landing page + canvas background
+│   │   ├── interview.js              # Interview session + voice + timer
+│   │   ├── report.js                 # Score report + PDF download
+│   │   └── history.js                # Past sessions from localStorage
+│   ├── index.html                    # Landing page
+│   ├── interview.html                # Interview session page
+│   ├── report.html                   # Performance report page
+│   └── history.html                  # Interview history page
+│
+├── .gitignore
+├── package.json
+└── README.md
 ```
 
 ---

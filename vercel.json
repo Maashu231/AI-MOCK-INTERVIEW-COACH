@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "name": "ai-mock-interview-coach",
+  "public": true,
+  "builds": [
+    { "src": "frontend/**/*.html", "use": "@vercel/static" },
+    { "src": "frontend/**/*.js", "use": "@vercel/static" },
+    { "src": "frontend/**/*.css", "use": "@vercel/static" },
+    { "src": "frontend/**/*.{png,jpg,jpeg,svg,webp,gif}", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/frontend/$1" }
+  ],
+  "env": {
+    "BACKEND_URL": "https://ai-mock-interview-saqe.onrender.com/api"
+  }
+}

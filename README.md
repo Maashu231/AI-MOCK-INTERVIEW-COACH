@@ -47,7 +47,7 @@ InterviewAI is built with a simple, clean architecture:
 - **AI Engine:** Google Gemini 2.5 Flash Lite
 - **PDF Export:** jsPDF
 - **Voice Input:** Web Speech API
-- **Hosting:** Vercel (frontend) + Render (backend)
+- **Hosting:** Vercel (frontend) – backend remains on Render
 
 ---
 

@@ -170,6 +170,20 @@
         </div>
       </div>
 
+      <div class="form-step">
+        <div class="step-header">
+          <span class="step-num">05</span>
+          <span class="step-title">Upload Resume <span class="optional-badge">Optional</span></span>
+        </div>
+        <div class="resume-upload" id="resumeUploadZone" onclick="document.getElementById('resumeInput').click()">
+          <input type="file" id="resumeInput" accept=".pdf,.txt" style="display:none" onchange="handleResumeSelect(event)">
+          <div class="upload-icon" id="uploadIcon">📄</div>
+          <div class="upload-text" id="uploadText">Click to upload resume (.pdf, .txt)</div>
+          <div class="upload-sub" id="uploadSub">Personalizes your interview questions</div>
+          <button class="btn-clear-resume" id="clearResumeBtn" onclick="clearResume(event)" style="display:none">Remove File</button>
+        </div>
+      </div>
+
       <div class="error-msg" id="errorMsg">⚠️ Please select an interview round to continue.</div>
 
       <button class="btn-start" id="startBtn" onclick="startInterview()">
@@ -186,6 +200,11 @@
     <span>Free forever · No signup required</span>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    // Configure PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+  </script>
   <script src="js/main.js"></script>
 </body>
 </html>

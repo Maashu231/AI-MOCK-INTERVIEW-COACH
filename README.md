@@ -1,9 +1,9 @@
 <div align="center">
 
-# 🎯 **InterviewAI**
+# 🎯 **InterviewAI v2.0**
 
 AI-powered mock interview coach that helps you practice and ace your tech interviews.
-Pick a role, answer AI-generated questions, get instant scores and feedback — all for free.
+Upload your resume, pick a role, answer AI-generated questions, get instant scores and feedback — all for free.
 
 <img src="assets/banner.png" alt="InterviewAI Banner" width="100%" />
 
@@ -17,24 +17,21 @@ Pick a role, answer AI-generated questions, get instant scores and feedback — 
 
 ---
 
-## 📂 Project Links
-
-- 📁 GitHub Repo: [AI-MOCK-INTERVIEW-COACH](https://github.com/Maashu231/AI-MOCK-INTERVIEW-COACH)
-
----
 
 ## ✨ Features
 
+- 📄 **Resume Upload** — AI analyzes your resume (PDF) and tailors the questions to your exact experience and projects.
 - 🎭 **25+ Tech Roles** — From Junior Dev to Solution Architect and Engineering Manager
 - 🔄 **4 Interview Rounds** — HR, Technical, Coding, and Managerial rounds
-- 🤖 **AI-Generated Questions** — Powered by Google Gemini 2.5 Flash Lite
-- 📊 **Instant Scoring** — Get a score out of 10 with feedback and ideal answers
-- 🎙️ **Voice Input** — Speak your answers using built-in speech recognition
-- ⏱️ **5-Minute Timer** — Simulates real interview pressure per question
-- 📄 **PDF Reports** — Download your performance report with one click
-- 📋 **Interview History** — View and revisit your last 10 sessions
-- 💾 **Auto-Save Progress** — Resume interrupted interviews within 2 hours          
-- 🎨 **Modern Dark UI** — Animated canvas background with smooth interactions
+- 🤖 **AI-Generated Questions** — Powered by Groq API (LLaMA 3.3) for lightning-fast responses without quota limits.
+- ⏭️ **Free Navigation** — Skip questions, switch back and forth, and submit answers at your own pace.
+- 📊 **Instant Scoring** — Get a score out of 10 with feedback and ideal answers.
+- 🎙️ **Voice Input** — Speak your answers using built-in speech recognition.
+- ⏱️ **5-Minute Timer** — Simulates real interview pressure per question.
+- 📄 **PDF Reports** — Download your performance report with one click.
+- 📋 **Interview History** — View and revisit your last 10 sessions.
+- 💾 **Auto-Save Progress** — Resume interrupted interviews seamlessly.
+- 🎨 **Modern Dark UI** — Animated canvas background with smooth interactions.
 
 ---
 
@@ -43,22 +40,24 @@ Pick a role, answer AI-generated questions, get instant scores and feedback — 
 InterviewAI is built with a simple, clean architecture:
 
 - **Frontend:** HTML5, Vanilla JavaScript, CSS3
+- **Resume Parsing:** PDF.js
 - **Backend:** Node.js, Express v5
-- **AI Engine:** Google Gemini 2.5 Flash Lite
+- **AI Engine:** Groq API (LLaMA 3)
 - **PDF Export:** jsPDF
 - **Voice Input:** Web Speech API
-- **Hosting:** Vercel (frontend) – backend remains on Render
 
 ---
 
 ## 📁 Folder Structure
 
-```
+```text
 AI-MOCK-INTERVIEW-COACH/
+│
+├── api/                          # Vercel Serverless Functions
 │
 ├── backend/
 │   ├── controllers/
-│   │   └── interviewController.js    # Gemini API calls + key rotation
+│   │   └── interviewController.js    # Groq API calls + key rotation
 │   ├── prompts/
 │   │   └── systemPrompt.js           # AI prompt templates
 │   ├── routes/
@@ -70,8 +69,8 @@ AI-MOCK-INTERVIEW-COACH/
 │   ├── css/
 │   │   └── style.css                 # Full dark theme + animations
 │   ├── js/
-│   │   ├── main.js                   # Landing page + canvas background
-│   │   ├── interview.js              # Interview session + voice + timer
+│   │   ├── main.js                   # Landing page + resume parsing
+│   │   ├── interview.js              # Interview session + navigation
 │   │   ├── report.js                 # Score report + PDF download
 │   │   └── history.js                # Past sessions from localStorage
 │   ├── index.html                    # Landing page
@@ -96,7 +95,7 @@ Make sure you have the following installed:
 
 - **Node.js** (v18 or higher)
 - **npm**
-- A free **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/apikey)
+- A free **Groq API Key** from [Groq Console](https://console.groq.com/keys)
 
 ### 📦 Installation
 
@@ -118,11 +117,11 @@ npm install
 Create a `.env` file inside the `backend/` folder:
 
 ```env
-GEMINI_API_KEY=your_api_key_here
+GROQ_API_KEYS=gsk_your_api_key_here
 PORT=3000
 ```
 
-> 💡 You can add multiple comma-separated keys for auto-rotation: `GEMINI_API_KEYS=key1,key2,key3`
+> 💡 You can add multiple comma-separated keys for auto-rotation: `GROQ_API_KEYS=key1,key2,key3`
 
 **4. Run the development server**
 

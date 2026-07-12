@@ -1,4 +1,10 @@
 
+// ── Escape HTML to prevent XSS ──
+function safeText(str) {
+  if (!str) return '—';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // ── Format ideal answer: render code blocks properly ──
 function formatIdealAnswer(text) {
   if (!text) return '—';
@@ -15,7 +21,7 @@ function formatIdealAnswer(text) {
   return escaped.replace(/\\n/g, '<br>');
 }
 
-window.onload = () => {
+window.addEventListener('load', () => {
   const results    = JSON.parse(sessionStorage.getItem('results') || '[]');
   const role       = sessionStorage.getItem('role') || 'Developer';
   const difficulty = sessionStorage.getItem('difficulty') || 'Beginner';
@@ -25,11 +31,15 @@ window.onload = () => {
     return;
   }
 
-  //--Auto Save to History--
-  saveToHistory(results, role, difficulty);
+  //--Auto Save to History (only for new interviews, not when viewing from history)--
+  const fromHistory = sessionStorage.getItem('fromHistory');
+  if (!fromHistory) {
+    saveToHistory(results, role, difficulty);
+  }
+  sessionStorage.removeItem('fromHistory');
 
   const totalScore = results.reduce((sum, r) => sum + (r.evaluation?.score || 0), 0);
-  const avgScore   = Math.round(totalScore / results.length * 10);
+  const avgScore   = results.length > 0 ? Math.round((totalScore / results.length) * 10) : 0;
   const excellent  = results.filter(r => r.evaluation?.score >= 8).length;
   const good       = results.filter(r => r.evaluation?.score >= 5 && r.evaluation?.score < 8).length;
   const needsWork  = results.filter(r => r.evaluation?.score < 5).length;
@@ -69,7 +79,7 @@ window.onload = () => {
       <div class="result-header" onclick="toggleResult(${i})">
         <div class="result-header-left">
           <div class="result-num">${i + 1}</div>
-          <div class="result-question">${result.question}</div>
+          <div class="result-question">${safeText(result.question)}</div>
         </div>
         <div class="result-score-badge ${scoreClass}">${emoji} ${score}/10</div>
         <div class="result-chevron" id="chevron-${i}">▼</div>
@@ -78,15 +88,15 @@ window.onload = () => {
         <div class="result-body-inner">
           <div class="result-section">
             <div class="result-section-label blue">💬 Your Answer</div>
-            <div class="result-section-text">${result.userAnswer}</div>
+            <div class="result-section-text">${safeText(result.userAnswer)}</div>
           </div>
           <div class="result-section">
             <div class="result-section-label green">✅ What Was Good</div>
-            <div class="result-section-text">${result.evaluation?.feedback || '—'}</div>
+            <div class="result-section-text">${safeText(result.evaluation?.feedback)}</div>
           </div>
           <div class="result-section">
             <div class="result-section-label amber">⚡ What to Improve</div>
-            <div class="result-section-text">${result.evaluation?.improvement || '—'}</div>
+            <div class="result-section-text">${safeText(result.evaluation?.improvement)}</div>
           </div>
           <div class="result-section">
             <div class="result-section-label purple">💡 Ideal Answer</div>
@@ -97,7 +107,7 @@ window.onload = () => {
     `;
     list.appendChild(card);
   });
-};
+});
 
 function toggleResult(i) {
   const body    = document.getElementById(`body-${i}`);
@@ -114,7 +124,7 @@ function downloadPDF() {
   const role       = sessionStorage.getItem('role') || 'Developer';
   const difficulty = sessionStorage.getItem('difficulty') || 'Beginner';
   const totalScore = results.reduce((sum, r) => sum + (r.evaluation?.score || 0), 0);
-  const avgScore   = Math.round(totalScore / results.length * 10);
+  const avgScore   = results.length > 0 ? Math.round((totalScore / results.length) * 10) : 0;
 
   // ── Header ──
   doc.setFillColor(79, 70, 229);
@@ -196,7 +206,7 @@ function downloadPDF() {
 // ── Save to History ──
 function saveToHistory(results, role, difficulty) {
   const totalScore = results.reduce((sum, r) => sum + (r.evaluation?.score || 0), 0);
-  const avgScore   = Math.round(totalScore / results.length * 10);
+  const avgScore   = results.length > 0 ? Math.round((totalScore / results.length) * 10) : 0;
 
   const interview = {
     id:         Date.now(),

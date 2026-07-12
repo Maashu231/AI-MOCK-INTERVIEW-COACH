@@ -5,13 +5,14 @@ const BACKEND = isLocalhost ? 'http://localhost:3000/api' : 'https://ai-mock-int
 
 let questions    = [];
 let currentIndex = 0;
-let results      = [];
+let results      = Array(10).fill(null);
+let draftAnswers = Array(10).fill('');
 let role         = '';
 let difficulty   = '';
 let round        = '';
 let level        = '';
 
-window.onload = async () => {
+window.addEventListener('load', async () => {
   role       = sessionStorage.getItem('role')       || 'Frontend Developer';
   difficulty = sessionStorage.getItem('difficulty') || 'Beginner';
   round      = sessionStorage.getItem('round')      || 'Technical';
@@ -28,22 +29,24 @@ window.onload = async () => {
     const resume = confirm(`You have an unfinished interview (${saved.results.length}/10 questions answered). Resume from where you left off?`);
 
     if (resume) {
-      // Restore everything
+      // Restore everything with fallback for older saves
       questions    = saved.questions;
-      results      = saved.results;
-      currentIndex = saved.results.length;
+      results      = Array.isArray(saved.results) && saved.results.length === 10 ? saved.results : Array(10).fill(null);
+      draftAnswers = Array.isArray(saved.draftAnswers) && saved.draftAnswers.length === 10 ? saved.draftAnswers : Array(10).fill('');
+      
+      // Find first unanswered question
+      const firstEmpty = results.findIndex(r => r === null);
+      currentIndex = firstEmpty === -1 ? 0 : firstEmpty;
 
       // Mark completed dots
       for (let i = 0; i < results.length; i++) {
-        const dot = document.getElementById(`dot-${i}`);
-        if (dot) { dot.classList.remove('active'); dot.classList.add('done'); }
+        if (results[i] !== null) {
+          const dot = document.getElementById(`dot-${i}`);
+          if (dot) dot.classList.add('done');
+        }
       }
 
-      // Update progress bar
-      document.getElementById('progressFill').style.width  = (results.length / 10 * 100) + '%';
-      document.getElementById('progressCount').textContent = `${results.length} / 10`;
-
-      // Show next question
+      // Show question
       showQuestion(currentIndex);
       return;
     } else {
@@ -52,7 +55,7 @@ window.onload = async () => {
   }
 
   await fetchQuestions();
-};
+});
 function buildDots() {
   const wrap = document.getElementById('questionDots');
   wrap.innerHTML = '';
@@ -61,16 +64,21 @@ function buildDots() {
     dot.className = 'q-dot' + (i === 0 ? ' active' : '');
     dot.textContent = i + 1;
     dot.id = `dot-${i}`;
+    dot.onclick = () => switchQuestion(i);
     wrap.appendChild(dot);
   }
 }
 
 async function fetchQuestions() {
   try {
+    const resumeText = sessionStorage.getItem('resumeText');
+    const payload = { role, difficulty, round, level };
+    if (resumeText) payload.resumeText = resumeText;
+
     const res  = await fetch(`${BACKEND}/generate-questions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role, difficulty, round, level })
+      body: JSON.stringify(payload)
     });
     const data = await res.json();
     if (data.success) {
@@ -84,26 +92,61 @@ async function fetchQuestions() {
   }
 }
 
+function switchQuestion(index) {
+  if (index === currentIndex) return;
+  // Save draft if they typed something but didn't submit
+  const input = document.getElementById('answerInput');
+  if (input) draftAnswers[currentIndex] = input.value;
+  
+  currentIndex = index;
+  showQuestion(currentIndex);
+}
+
 function showQuestion(index) {
   document.getElementById('loadingScreen').style.display   = 'none';
   document.getElementById('interviewScreen').style.display = 'block';
 
   document.getElementById('questionNumber').textContent = index + 1;
   document.getElementById('questionText').textContent   = questions[index];
-  document.getElementById('answerInput').value          = '';
-  document.getElementById('charCount').textContent      = '0 characters';
+  
+  // Navigation buttons visibility
+  document.getElementById('prevBtn').style.display = index > 0 ? 'flex' : 'none';
+  document.getElementById('nextBtn').style.display = index < 9 ? 'flex' : 'none';
 
-  document.getElementById('feedbackCard').classList.remove('show');
-  document.getElementById('submitBtn').style.display    = 'flex';
-  document.getElementById('submitBtn').classList.remove('loading');
-  document.getElementById('submitText').textContent     = 'Submit Answer';
-  document.getElementById('submitArrow').textContent    = '→';
-  document.getElementById('nextBtn').style.display      = 'none';
-  document.getElementById('errorMsg').classList.remove('show');
+  if (results[index]) {
+    // Question already answered
+    document.getElementById('answerInput').value = results[index].userAnswer;
+    document.getElementById('answerInput').disabled = true;
+    document.getElementById('charCount').textContent = 'Question already answered';
+    
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('micBtn').style.display = 'none';
+    
+    stopTimer();
+    document.getElementById('timerText').textContent = 'Done';
+    document.getElementById('timerCircle').className = 'timer-circle done';
+    
+    // Show feedback immediately
+    showFeedback(results[index].evaluation, true);
+  } else {
+    // Unanswered question
+    document.getElementById('answerInput').disabled = false;
+    document.getElementById('answerInput').value = draftAnswers[index] || '';
+    document.getElementById('charCount').textContent = (draftAnswers[index] ? draftAnswers[index].length : 0) + ' characters';
+    
+    document.getElementById('feedbackCard').classList.remove('show');
+    document.getElementById('submitBtn').style.display = 'flex';
+    document.getElementById('micBtn').style.display = 'flex';
+    document.getElementById('submitBtn').classList.remove('loading');
+    document.getElementById('submitText').textContent  = 'Submit Answer';
+    document.getElementById('submitArrow').textContent = '→';
+    document.getElementById('errorMsg').classList.remove('show');
+    
+    startTimer();
+  }
 
-  updateProgress(index);
+  updateProgress();
   updateDots(index);
-  startTimer();
 }
 
 async function submitAnswer() {
@@ -127,12 +170,12 @@ async function submitAnswer() {
     const data = await res.json();
 
     if (data.success) {
-      results.push({
+      results[currentIndex] = {
         question:   questions[currentIndex],
         userAnswer: answer,
         evaluation: data.evaluation
-      });
-      showFeedback(data.evaluation);
+      };
+      showFeedback(data.evaluation, false);
       markDotDone(currentIndex);
     } else {
       err.textContent = data.error;
@@ -150,9 +193,8 @@ async function submitAnswer() {
   }
 }
 
-function showFeedback(evaluation) {
-  saveProgress();
-  stopTimer();
+function showFeedback(evaluation, isRestored = false) {
+  if (!isRestored) saveProgress();
   const score  = evaluation.score;
   const circle = document.getElementById('scoreCircle');
 
@@ -166,28 +208,34 @@ function showFeedback(evaluation) {
 
   document.getElementById('feedbackCard').classList.add('show');
   document.getElementById('submitBtn').style.display = 'none';
-
-  const isLast  = currentIndex === questions.length - 1;
-  const nextBtn = document.getElementById('nextBtn');
-  nextBtn.style.display = 'flex';
-  document.getElementById('nextText').textContent = isLast ? 'View Report 📊' : 'Next Question';
 }
 
 function nextQuestion() {
-  if (currentIndex === questions.length - 1) {
-    clearProgress();
-    sessionStorage.setItem('results',    JSON.stringify(results));
-    sessionStorage.setItem('role',       role);
-    sessionStorage.setItem('difficulty', difficulty);
-    window.location.href = 'report.html';
-    return;
-  }
-  currentIndex++;
-  showQuestion(currentIndex);
+  if (currentIndex < 9) switchQuestion(currentIndex + 1);
 }
 
-function updateProgress(index) {
-  const done  = results.length;
+function prevQuestion() {
+  if (currentIndex > 0) switchQuestion(currentIndex - 1);
+}
+
+function finishInterview() {
+  const answered = results.filter(r => r !== null).length;
+  if (answered < 10) {
+    const confirmFinish = confirm(`You have only answered ${answered}/10 questions. Are you sure you want to finish and see your report? Unanswered questions will be ignored.`);
+    if (!confirmFinish) return;
+  }
+  
+  clearProgress();
+  // Filter out nulls for the report
+  const finalResults = results.filter(r => r !== null);
+  sessionStorage.setItem('results',    JSON.stringify(finalResults));
+  sessionStorage.setItem('role',       role);
+  sessionStorage.setItem('difficulty', difficulty);
+  window.location.href = 'report.html';
+}
+
+function updateProgress() {
+  const done  = results.filter(r => r !== null).length;
   const pct   = (done / 10) * 100;
   document.getElementById('progressFill').style.width  = pct + '%';
   document.getElementById('progressCount').textContent = `${done} / 10`;
@@ -205,8 +253,7 @@ function updateDots(activeIndex) {
 function markDotDone(index) {
   const dot = document.getElementById(`dot-${index}`);
   if (dot) { dot.classList.remove('active'); dot.classList.add('done'); }
-  document.getElementById('progressFill').style.width  = (results.length / 10 * 100) + '%';
-  document.getElementById('progressCount').textContent = `${results.length} / 10`;
+  updateProgress();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -244,10 +291,11 @@ function formatIdealAnswer(text) {
 }
 
 function showFetchError(msg) {
+  const safeMsg = String(msg).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   document.getElementById('loadingScreen').innerHTML = `
     <div style="font-size:40px;margin-bottom:16px">⚠️</div>
     <h3 style="color:#ef4444;margin-bottom:8px">Something went wrong</h3>
-    <p style="color:#6b6b80;margin-bottom:24px">${msg}</p>
+    <p style="color:#6b6b80;margin-bottom:24px">${safeMsg}</p>
     <button onclick="window.location.href='index.html'"
       style="padding:10px 24px;background:#4f46e5;color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
       ← Go Back
@@ -260,6 +308,10 @@ function startTimer() {
   const circle = document.getElementById('timerCircle');
   const text   = document.getElementById('timerText');
 
+  // Reset display immediately (prevents flash of old timer value)
+  const initMins = Math.floor(TIMER_SECONDS / 60);
+  const initSecs = TIMER_SECONDS % 60;
+  text.textContent = `${initMins}:${initSecs.toString().padStart(2, '0')}`;
   circle.className = 'timer-circle';
 
   timerInterval = setInterval(() => {
@@ -368,17 +420,18 @@ function stopVoice() {
   micText.textContent = 'Speak';
   isListening = false;
 }
-// ── Save progress to localStorage ──
+// ── Progress persistence ──
 function saveProgress() {
   const progress = {
-    role,
-    difficulty,
     questions,
     results,
-    currentIndex,
-    timestamp: Date.now()
+    draftAnswers,
+    role,
+    difficulty,
+    round,
+    level
   };
-  localStorage.setItem('interviewProgress', JSON.stringify(progress));
+  localStorage.setItem('interview_progress', JSON.stringify(progress));
 }
 
 // ── Restore progress if exists ──

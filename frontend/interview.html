@@ -77,7 +77,7 @@
             🎙️ <span id="micText">Speak</span>
           </button>
         </div>
-        <textarea id="answerInput" class="answer-textarea" placeholder="Type your answer or click 🎙️ Speak to use voice..."></textarea>
+        <textarea id="answerInput" class="answer-textarea" placeholder="Type your answer or click 🎙️ Speak to use voice..." oninput="draftAnswers[currentIndex] = this.value"></textarea>
         <div class="char-count" id="charCount">0 characters</div>
       </div>
 
@@ -115,13 +115,25 @@
 
       <!-- Actions -->
       <div class="actions">
+        <button class="btn-prev" id="prevBtn" onclick="prevQuestion()" style="display:none">
+          <span>←</span> Previous
+        </button>
+        
         <button class="btn-submit" id="submitBtn" onclick="submitAnswer()">
           <span id="submitText">Submit Answer</span>
           <span id="submitArrow">→</span>
         </button>
-        <button class="btn-next show" id="nextBtn" onclick="nextQuestion()" style="display:none">
+        
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()">
           <span id="nextText">Next Question</span>
-          <span>→</span>
+          <span id="nextArrow">→</span>
+        </button>
+      </div>
+      
+      <!-- Finish Button (placed below actions for visibility) -->
+      <div class="finish-action" style="margin-top: 16px; text-align: center;">
+        <button class="btn-finish" id="finishBtn" onclick="finishInterview()">
+          Finish Interview & See Report
         </button>
       </div>
 

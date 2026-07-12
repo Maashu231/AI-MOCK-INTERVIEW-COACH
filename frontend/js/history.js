@@ -1,4 +1,4 @@
-window.onload = () => {
+window.addEventListener('load', () => {
   const history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
   const list    = document.getElementById('historyList');
   const empty   = document.getElementById('emptyState');
@@ -31,7 +31,7 @@ window.onload = () => {
     `;
     list.appendChild(card);
   });
-};
+});
 
 function viewInterview(index) {
   const history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
@@ -40,6 +40,7 @@ function viewInterview(index) {
   sessionStorage.setItem('results',    JSON.stringify(interview.results));
   sessionStorage.setItem('role',       interview.role);
   sessionStorage.setItem('difficulty', interview.difficulty);
+  sessionStorage.setItem('fromHistory', 'true');
 
   window.location.href = 'report.html';
 }

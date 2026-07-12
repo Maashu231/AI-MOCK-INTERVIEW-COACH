@@ -8,7 +8,25 @@ const interviewRoutes = require('./routes/interview');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Restrict API access to known frontend origins only
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://ai-mock-interview-saqe.onrender.com',
+  // Add your Vercel domain here when deployed:
+  // 'https://your-app.vercel.app',
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (server-to-server, curl, mobile apps)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  }
+}));
 app.use(express.json());
 app.use('/api', interviewRoutes);
 

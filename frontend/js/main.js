@@ -3,6 +3,7 @@
 let selectedDifficulty = 'Beginner';
 let selectedLevel      = 'Fresher';
 let selectedRound      = null;
+let resumeText         = '';
 
 /* ══════════════════════════════════════
    SHADER-LIKE CANVAS BACKGROUND
@@ -170,6 +171,75 @@ function selectRound(el) {
 }
 
 /* ══════════════════════════════════════
+   RESUME UPLOAD HANDLER
+══════════════════════════════════════ */
+async function handleResumeSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const zone = document.getElementById('resumeUploadZone');
+  const icon = document.getElementById('uploadIcon');
+  const text = document.getElementById('uploadText');
+  const sub  = document.getElementById('uploadSub');
+  const btn  = document.getElementById('clearResumeBtn');
+  
+  // Loading state
+  icon.textContent = '⏳';
+  text.textContent = 'Parsing resume...';
+  sub.textContent  = 'Please wait';
+  zone.style.pointerEvents = 'none';
+
+  try {
+    if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let extracted = '';
+      // Limit to first 3 pages to avoid massive prompts
+      const maxPages = Math.min(pdf.numPages, 3);
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        extracted += content.items.map(item => item.str).join(' ') + '\n';
+      }
+      resumeText = extracted.substring(0, 8000); // Max 8k chars
+    } else if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+      const textContent = await file.text();
+      resumeText = textContent.substring(0, 8000);
+    } else {
+      throw new Error('Unsupported file type');
+    }
+
+    // Success state
+    zone.classList.add('uploaded');
+    icon.textContent = '✅';
+    text.textContent = file.name;
+    sub.textContent  = 'Resume attached and ready';
+    btn.style.display = 'inline-block';
+  } catch (error) {
+    console.error('Error parsing resume:', error);
+    icon.textContent = '⚠️';
+    text.textContent = 'Failed to read file';
+    sub.textContent  = 'Try a different PDF or TXT';
+    resumeText = '';
+  } finally {
+    zone.style.pointerEvents = 'auto';
+  }
+}
+
+function clearResume(event) {
+  event.stopPropagation();
+  resumeText = '';
+  document.getElementById('resumeInput').value = '';
+  
+  const zone = document.getElementById('resumeUploadZone');
+  zone.classList.remove('uploaded');
+  document.getElementById('uploadIcon').textContent = '📄';
+  document.getElementById('uploadText').textContent = 'Click to upload resume (.pdf, .txt)';
+  document.getElementById('uploadSub').textContent = 'Personalizes your interview questions';
+  document.getElementById('clearResumeBtn').style.display = 'none';
+}
+
+/* ══════════════════════════════════════
    START INTERVIEW
 ══════════════════════════════════════ */
 function startInterview() {
@@ -192,6 +262,11 @@ function startInterview() {
   sessionStorage.setItem('difficulty', selectedDifficulty);
   sessionStorage.setItem('round',      selectedRound);
   sessionStorage.setItem('level',      selectedLevel);
+  if (resumeText) {
+    sessionStorage.setItem('resumeText', resumeText);
+  } else {
+    sessionStorage.removeItem('resumeText');
+  }
 
   document.body.classList.add('page-exit');
   setTimeout(() => { window.location.href = 'interview.html'; }, 300);

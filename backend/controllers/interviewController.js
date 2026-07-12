@@ -12,11 +12,10 @@ const apiKeys = (process.env.GROQ_API_KEYS || process.env.GROQ_API_KEY || '')
   .filter(k => k.length > 0);
 
 if (apiKeys.length === 0) {
-  console.error('❌ No API keys found! Set GROQ_API_KEYS in your .env file.');
-  process.exit(1);
+  console.warn('⚠️ No API keys found! Set GROQ_API_KEYS in your .env file. API routes will fail when called.');
+} else {
+  console.log(`✅ Loaded ${apiKeys.length} API key(s) for round-robin rotation`);
 }
-
-console.log(`✅ Loaded ${apiKeys.length} API key(s) for round-robin rotation`);
 
 // Create a Groq client for each key
 const clients = apiKeys.map(key => {
@@ -26,6 +25,9 @@ const clients = apiKeys.map(key => {
 let currentKeyIndex = 0;
 
 function getNextClient() {
+  if (clients.length === 0) {
+    throw new Error('No Groq API keys configured on the server.');
+  }
   const client = clients[currentKeyIndex];
   currentKeyIndex = (currentKeyIndex + 1) % clients.length;
   return client;

@@ -1,6 +1,7 @@
 let timerInterval = null;
 const TIMER_SECONDS = 300; // 5 minutes
-const BACKEND = '/api';
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BACKEND = isLocalhost ? 'http://localhost:3000/api' : 'https://ai-mock-interview-saqe.onrender.com/api';
 
 let questions    = [];
 let currentIndex = 0;

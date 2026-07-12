@@ -87,7 +87,7 @@ async function fetchQuestions() {
       showFetchError(data.error);
     }
   } catch (err) {
-    showFetchError('Could not connect to server. Make sure your backend is running!');
+    showFetchError('Fetch failed: ' + err.message);
   }
 }
 
@@ -183,8 +183,8 @@ async function submitAnswer() {
       document.getElementById('submitText').textContent  = 'Submit Answer';
       document.getElementById('submitArrow').textContent = '→';
     }
-  } catch (e) {
-    err.textContent = '⚠️ Could not evaluate. Check backend is running!';
+  } catch (err) {
+    err.textContent = '⚠️ Could not evaluate: ' + err.message;
     err.classList.add('show');
     btn.classList.remove('loading');
     document.getElementById('submitText').textContent  = 'Submit Answer';

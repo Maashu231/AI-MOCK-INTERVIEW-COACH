@@ -1,9 +1,8 @@
 {
   "version": 2,
   "name": "ai-mock-interview-coach",
-  "public": true,
+  "outputDirectory": "frontend",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/frontend/$1" }
+    { "source": "/api/(.*)", "destination": "/api/$1" }
   ]
 }

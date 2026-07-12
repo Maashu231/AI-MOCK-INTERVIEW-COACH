@@ -19,7 +19,10 @@ if (apiKeys.length === 0) {
 
 // Create a Groq client for each key
 const clients = apiKeys.map(key => {
-  return new Groq({ apiKey: key });
+  return new Groq({ 
+    apiKey: key,
+    maxRetries: 0 // Disable SDK retries to allow instant failover and prevent Vercel timeouts
+  });
 });
 
 let currentKeyIndex = 0;
@@ -85,7 +88,7 @@ async function callWithRetry(prompt) {
     try {
       const completion = await client.chat.completions.create({
         messages: [{ role: 'user', content: prompt }],
-        model: 'llama-3.3-70b-versatile', // Reliable and fast model
+        model: 'llama-3.1-8b-instant', // Instant model to prevent Vercel 10s timeouts
         temperature: 0.7,
       });
       const responseText = completion.choices[0].message.content;

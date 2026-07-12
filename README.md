@@ -17,11 +17,6 @@ Upload your resume, pick a role, answer AI-generated questions, get instant scor
 
 ---
 
-## 📂 Project Links
-
-- 📁 GitHub Repo: [AI-MOCK-INTERVIEW-COACH](https://github.com/Maashu231/AI-MOCK-INTERVIEW-COACH)
-
----
 
 ## ✨ Features
 

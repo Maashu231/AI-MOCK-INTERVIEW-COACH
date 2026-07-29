@@ -13,8 +13,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
   'https://ai-mock-interview-saqe.onrender.com',
-  // Add your Vercel domain here when deployed:
-  // 'https://your-app.vercel.app',
+  'https://ai-mock-interview-coach-mu.vercel.app'
 ];
 
 app.use(cors({

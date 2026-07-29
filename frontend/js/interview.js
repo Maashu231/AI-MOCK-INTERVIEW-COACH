@@ -183,8 +183,8 @@ async function submitAnswer() {
       document.getElementById('submitText').textContent  = 'Submit Answer';
       document.getElementById('submitArrow').textContent = '→';
     }
-  } catch (err) {
-    err.textContent = '⚠️ Could not evaluate: ' + err.message;
+  } catch (fetchErr) {
+    err.textContent = '⚠️ Could not evaluate: ' + fetchErr.message;
     err.classList.add('show');
     btn.classList.remove('loading');
     document.getElementById('submitText').textContent  = 'Submit Answer';
@@ -428,9 +428,10 @@ function saveProgress() {
     role,
     difficulty,
     round,
-    level
+    level,
+    timestamp: Date.now()
   };
-  localStorage.setItem('interview_progress', JSON.stringify(progress));
+  localStorage.setItem('interviewProgress', JSON.stringify(progress));
 }
 
 // ── Restore progress if exists ──

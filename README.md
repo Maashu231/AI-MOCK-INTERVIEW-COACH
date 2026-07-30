@@ -41,7 +41,7 @@ InterviewAI is built with a simple, clean architecture:
 
 - **Frontend:** HTML5, Vanilla JavaScript, CSS3
 - **Resume Parsing:** PDF.js
-- **Backend:** Node.js, Express v5
+- **Backend:** Node.js, Express (Local Dev) / Vercel Serverless Functions
 - **AI Engine:** Groq API (LLaMA 3)
 - **PDF Export:** jsPDF
 - **Voice Input:** Web Speech API
@@ -54,30 +54,28 @@ InterviewAI is built with a simple, clean architecture:
 AI-MOCK-INTERVIEW-COACH/
 │
 ├── api/                          # Vercel Serverless Functions
+│   ├── utils/
+│   │   ├── groqClient.js         # Groq API calls + key rotation
+│   │   └── prompts.js            # AI prompt templates
+│   ├── evaluate-answer.js        # Answer evaluation endpoint
+│   └── generate-questions.js     # Question generation endpoint
 │
-├── backend/
-│   ├── controllers/
-│   │   └── interviewController.js    # Groq API calls + key rotation
-│   ├── prompts/
-│   │   └── systemPrompt.js           # AI prompt templates
-│   ├── routes/
-│   │   └── interview.js              # API route definitions
-│   ├── server.js                     # Express server entry point
-│   └── .env                          # API keys (git-ignored)
-│
-├── frontend/
+├── src/                          # Frontend Assets
 │   ├── css/
-│   │   └── style.css                 # Full dark theme + animations
+│   │   └── style.css             # Full dark theme + animations
 │   ├── js/
-│   │   ├── main.js                   # Landing page + resume parsing
-│   │   ├── interview.js              # Interview session + navigation
-│   │   ├── report.js                 # Score report + PDF download
-│   │   └── history.js                # Past sessions from localStorage
-│   ├── index.html                    # Landing page
-│   ├── interview.html                # Interview session page
-│   ├── report.html                   # Performance report page
-│   └── history.html                  # Interview history page
+│   │   ├── main.js               # Landing page + resume parsing
+│   │   ├── interview.js          # Interview session + navigation
+│   │   ├── report.js             # Score report + PDF download
+│   │   └── history.js            # Past sessions from localStorage
+│   ├── index.html                # Landing page
+│   ├── interview.html            # Interview session page
+│   ├── report.html               # Performance report page
+│   └── history.html              # Interview history page
 │
+├── local-dev.js                  # Express local dev server (mocks Vercel)
+├── vercel.json                   # Vercel deployment config
+├── .env                          # API keys (git-ignored)
 ├── .gitignore
 ├── package.json
 └── README.md
@@ -114,7 +112,7 @@ npm install
 
 **3. Set up environment variables**
 
-Create a `.env` file inside the `backend/` folder:
+Create a `.env` file inside the **root** directory:
 
 ```env
 GROQ_API_KEYS=gsk_your_api_key_here

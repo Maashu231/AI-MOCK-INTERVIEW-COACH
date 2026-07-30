@@ -159,23 +159,32 @@ async function submitAnswer() {
   btn.classList.add('loading');
   document.getElementById('submitText').textContent  = 'Evaluating...';
   document.getElementById('submitArrow').textContent = '⏳';
+  
+  // Lock navigation to prevent race conditions
+  document.getElementById('prevBtn').disabled = true;
+  document.getElementById('nextBtn').disabled = true;
+  const lockedIndex = currentIndex;
 
   try {
     const res  = await fetch(`${BACKEND}/evaluate-answer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: questions[currentIndex], userAnswer: answer })
+      body: JSON.stringify({ question: questions[lockedIndex], userAnswer: answer })
     });
     const data = await res.json();
 
     if (data.success) {
-      results[currentIndex] = {
-        question:   questions[currentIndex],
+      results[lockedIndex] = {
+        question:   questions[lockedIndex],
         userAnswer: answer,
         evaluation: data.evaluation
       };
-      showFeedback(data.evaluation, false);
-      markDotDone(currentIndex);
+      if (currentIndex === lockedIndex) {
+        showFeedback(data.evaluation, false);
+      } else {
+        saveProgress();
+      }
+      markDotDone(lockedIndex);
     } else {
       err.textContent = data.error;
       err.classList.add('show');
@@ -189,6 +198,9 @@ async function submitAnswer() {
     btn.classList.remove('loading');
     document.getElementById('submitText').textContent  = 'Submit Answer';
     document.getElementById('submitArrow').textContent = '→';
+  } finally {
+    document.getElementById('prevBtn').disabled = false;
+    document.getElementById('nextBtn').disabled = false;
   }
 }
 
@@ -455,7 +467,7 @@ function restoreProgress() {
   }
 
   // Check if interview was already completed
-  if (progress.results.length === 10) {
+  if (progress.results.every(r => r !== null)) {
     localStorage.removeItem('interviewProgress');
     return false;
   }

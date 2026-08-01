@@ -16,13 +16,13 @@ app.use(express.json());
 app.post('/api/generate-questions', (req, res) => generateQuestions(req, res));
 app.post('/api/evaluate-answer', (req, res) => evaluateAnswer(req, res));
 
-// Serve frontend static files from src/
-app.use(express.static(path.join(__dirname, 'src')));
+// Serve frontend static files from public/
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch-all
 app.use((req, res, next) => {
   if (req.accepts('html')) {
-    res.sendFile(path.join(__dirname, 'src', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
   } else {
     next();
   }

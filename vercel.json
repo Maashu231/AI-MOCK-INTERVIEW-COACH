@@ -1,6 +1,4 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/((?!api).*)", "destination": "/src/$1" }
-  ]
+  "outputDirectory": "src"
 }

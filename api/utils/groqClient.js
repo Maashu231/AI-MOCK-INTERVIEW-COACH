@@ -7,7 +7,10 @@ const apiKeys = (process.env.GROQ_API_KEYS || process.env.GROQ_API_KEY || '')
   .filter(k => k.length > 0);
 
 if (apiKeys.length === 0) {
-  console.warn('⚠️ No Groq API keys found. Please check your environment variables.');
+  console.error('❌ No Groq API keys found!');
+  console.error('   GROQ_API_KEYS:', process.env.GROQ_API_KEYS ? 'SET (length: ' + process.env.GROQ_API_KEYS.length + ')' : 'UNDEFINED');
+  console.error('   GROQ_API_KEY:', process.env.GROQ_API_KEY ? 'SET' : 'UNDEFINED');
+  console.error('   → Make sure GROQ_API_KEYS is set in your Vercel Environment Variables dashboard.');
 }
 
 const clients = apiKeys.map(key => new Groq({ apiKey: key, maxRetries: 0 }));
@@ -66,7 +69,7 @@ function extractJSON(text) {
 }
 
 // ── Retry helper ──
-async function callWithRetry(prompt, model = 'llama-3.1-8b-instant', temperature = 0.7) {
+async function callWithRetry(prompt, model = 'openai/gpt-oss-20b', temperature = 0.7) {
   let lastError = null;
   // Try each client exactly once in case of failure
   const attempts = clients.length > 0 ? clients.length : 1; 
@@ -88,7 +91,10 @@ async function callWithRetry(prompt, model = 'llama-3.1-8b-instant', temperature
     }
   }
 
-  throw lastError || new Error('All API requests failed');
+  const errorMsg = lastError ? lastError.message : 'All API requests failed';
+  const wrappedError = new Error(`AI service error: ${errorMsg}`);
+  wrappedError.statusCode = lastError?.status || 500;
+  throw wrappedError;
 }
 
 module.exports = { callWithRetry };

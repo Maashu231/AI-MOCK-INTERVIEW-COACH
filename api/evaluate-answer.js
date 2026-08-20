@@ -27,6 +27,9 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error('Error evaluating answer:', error.message || error);
-    return res.status(500).json({ success: false, error: 'Failed to evaluate answer. Please try again!' });
+    const userMsg = error.message?.includes('No Groq API keys')
+      ? 'Server configuration error: API keys not set. Please contact the administrator.'
+      : 'Failed to evaluate answer. Please try again!';
+    return res.status(500).json({ success: false, error: userMsg });
   }
 };

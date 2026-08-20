@@ -27,6 +27,9 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error('Error generating questions:', error.message || error);
-    return res.status(500).json({ success: false, error: 'Failed to generate questions. Please try again!' });
+    const userMsg = error.message?.includes('No Groq API keys')
+      ? 'Server configuration error: API keys not set. Please contact the administrator.'
+      : 'Failed to generate questions. Please try again!';
+    return res.status(500).json({ success: false, error: userMsg });
   }
 };

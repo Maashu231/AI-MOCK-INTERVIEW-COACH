@@ -1,4 +1,4 @@
-const { generateQuestionsPrompt } = require('./utils/prompts');
+const { generateQuestionsPrompt, sanitizeInput } = require('./utils/prompts');
 const { callWithRetry } = require('./utils/groqClient');
 
 module.exports = async (req, res) => {
@@ -11,12 +11,17 @@ module.exports = async (req, res) => {
 
   try {
     const { role, difficulty, round, level, resumeText } = req.body;
+    const safeRole = sanitizeInput(role);
+    const safeDifficulty = sanitizeInput(difficulty);
+    const safeRound = round ? sanitizeInput(round) : round;
+    const safeLevel = level ? sanitizeInput(level) : level;
+    const safeResumeText = resumeText ? sanitizeInput(resumeText) : resumeText;
 
     if (!role || !difficulty) {
       return res.status(400).json({ success: false, error: 'Role and difficulty are required!' });
     }
 
-    const prompt = generateQuestionsPrompt(role, difficulty, round, level, resumeText);
+    const prompt = generateQuestionsPrompt(safeRole, safeDifficulty, safeRound, safeLevel, safeResumeText);
     const questions = await callWithRetry(prompt);
 
     if (!Array.isArray(questions) || questions.length === 0) {

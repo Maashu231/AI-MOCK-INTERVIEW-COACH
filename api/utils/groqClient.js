@@ -33,12 +33,12 @@ function extractJSON(text) {
   let cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
   // 2. Try parsing directly
-  try { return JSON.parse(cleaned); } catch (_) {}
+  try { return JSON.parse(cleaned); } catch (_) { }
 
   // 3. Find first [ or { and match closing
   const arrayStart = cleaned.indexOf('[');
   const objectStart = cleaned.indexOf('{');
-  
+
   let start = -1;
   let endChar = '';
 
@@ -69,10 +69,10 @@ function extractJSON(text) {
 }
 
 // ── Retry helper ──
-async function callWithRetry(prompt, model = 'openai/gpt-oss-20b', temperature = 0.7) {
+async function callWithRetry(prompt, model = 'openai/gpt-oss-120b', temperature = 0.7) {
   let lastError = null;
   // Try each client exactly once in case of failure
-  const attempts = clients.length > 0 ? clients.length : 1; 
+  const attempts = clients.length > 0 ? clients.length : 1;
 
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
@@ -97,4 +97,4 @@ async function callWithRetry(prompt, model = 'openai/gpt-oss-20b', temperature =
   throw wrappedError;
 }
 
-module.exports = { callWithRetry };
+module.exports = { callWithRetry, extractJSON };

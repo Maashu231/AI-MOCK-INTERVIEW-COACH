@@ -27,7 +27,7 @@ const generateQuestionsPrompt = (role, difficulty, round = 'Technical', level = 
   const safeLevel = sanitizeInput(level, 50);
   const safeResume = sanitizeInput(resumeText, 8000);
 
-  const resumeInstruction = safeResume 
+  const resumeInstruction = safeResume
     ? `
     CRITICAL: The candidate has provided their resume below. You MUST tailor the questions to their specific experience, projects, and skills mentioned in the resume. 
     - If they list specific technologies or frameworks, ask deep-dive technical questions about those exact technologies.
@@ -37,7 +37,7 @@ const generateQuestionsPrompt = (role, difficulty, round = 'Technical', level = 
     --- CANDIDATE RESUME ---
     ${safeResume}
     ------------------------
-    ` 
+    `
     : '';
 
   return `
@@ -126,4 +126,4 @@ const evaluateAnswerPrompt = (question, userAnswer) => {
   `;
 };
 
-module.exports = { generateQuestionsPrompt, evaluateAnswerPrompt };
+module.exports = { generateQuestionsPrompt, evaluateAnswerPrompt, sanitizeInput };

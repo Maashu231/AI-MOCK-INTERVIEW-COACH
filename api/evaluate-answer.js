@@ -17,7 +17,12 @@ module.exports = async (req, res) => {
     }
 
     const prompt = evaluateAnswerPrompt(question, userAnswer);
+    const startTime = Date.now();
     const evaluation = await callWithRetry(prompt);
+
+    console.log(
+      `evaluate-answer AI request completed in ${Date.now() - startTime}ms`
+    );
 
     if (typeof evaluation !== 'object' || evaluation.score === undefined) {
       throw new Error('AI returned invalid evaluation format');

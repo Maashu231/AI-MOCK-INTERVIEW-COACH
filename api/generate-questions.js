@@ -22,7 +22,12 @@ module.exports = async (req, res) => {
     }
 
     const prompt = generateQuestionsPrompt(safeRole, safeDifficulty, safeRound, safeLevel, safeResumeText);
+    const startTime = Date.now();
     const questions = await callWithRetry(prompt);
+
+    console.log(
+      `generate-questions AI request completed in ${Date.now() - startTime}ms`
+    );
 
     if (!Array.isArray(questions) || questions.length === 0) {
       throw new Error('AI returned invalid questions format');

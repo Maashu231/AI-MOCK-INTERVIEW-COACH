@@ -53,6 +53,10 @@ InterviewAI is built with a simple, clean architecture:
 ```text
 AI-MOCK-INTERVIEW-COACH/
 │
+├── .github/
+│   └── workflows/
+│       └── test.yml              # CI workflow — runs tests on push/PR
+│
 ├── api/                          # Vercel Serverless Functions
 │   ├── utils/
 │   │   ├── groqClient.js         # Groq API calls + key rotation
@@ -60,7 +64,10 @@ AI-MOCK-INTERVIEW-COACH/
 │   ├── evaluate-answer.js        # Answer evaluation endpoint
 │   └── generate-questions.js     # Question generation endpoint
 │
-├── src/                          # Frontend Assets
+├── assets/
+│   └── banner.png                # README banner image
+│
+├── public/                       # Frontend (served as static files)
 │   ├── css/
 │   │   └── style.css             # Full dark theme + animations
 │   ├── js/
@@ -73,11 +80,20 @@ AI-MOCK-INTERVIEW-COACH/
 │   ├── report.html               # Performance report page
 │   └── history.html              # Interview history page
 │
-├── local-dev.js                  # Express local dev server (mocks Vercel)
-├── vercel.json                   # Vercel deployment config
+├── test/                         # Test suite (Node.js built-in test runner)
+│   ├── api.test.js               # API endpoint integration tests
+│   ├── api.failure.test.js       # API error-handling / edge-case tests
+│   ├── groqClient.test.js        # Groq client unit tests
+│   ├── groqClient.config.test.js # Groq client configuration tests
+│   ├── groqClient.failure.test.js# Groq client failure-path tests
+│   ├── prompts.test.js           # Prompt template tests
+│   └── smoke.test.js             # Smoke / sanity tests
+│
 ├── .env                          # API keys (git-ignored)
 ├── .gitignore
+├── local-dev.js                  # Express local dev server (mocks Vercel)
 ├── package.json
+├── vercel.json                   # Vercel deployment config
 └── README.md
 ```
 

@@ -1,11 +1,11 @@
 {
   "name": "ai-mock-interview-coach",
   "version": "2.0.0",
-  "description": "AI-powered mock interview coach with Groq AI",
+  "description": "AI-powered mock interview coach with Groq API",
   "main": "index.js",
   "scripts": {
     "start": "node local-dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [
     "interview",
